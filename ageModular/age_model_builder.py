@@ -32,13 +32,6 @@ class model_AGEV0(nn.Module):
         )
         
     def forward(self, x):
-        # x = self.conv_block_1(x)
-        # # print(x[:5])
-        # x = self.conv_block_2(x)
-        # # print(x[:5])
-        # x = self.conv_block_3(x)
-        # # print(x[:5])
-        # age = self.age_fc(x)
         age = self.age_fc(self.conv_block_3(self.conv_block_2(self.conv_block_1(x))))
         return age
     

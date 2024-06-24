@@ -76,7 +76,7 @@ def train(model:torch.nn.Module,
                                         loss_fn=loss_fn,
                                         device=device)
 
-        print(f"train loss {train_loss:.4f} | test loss {test_loss:.4f} | ")
+        print(f"\ntrain loss {train_loss:.4f} | test loss {test_loss:.4f} | ")
         print("*"*14)
 
         results['train loss'].append(train_loss)

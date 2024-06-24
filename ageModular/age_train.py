@@ -6,10 +6,10 @@ from torch.utils.data import DataLoader, Dataset
 from PIL import Image
 from pathlib import Path
 
-from model_builder import model_AGEV0
-from data_setup import create_dataloader
-from engine import train
-from a_utils import transforms, save_model
+from age_model_builder import model_AGEV0
+from age_data_setup import create_dataloader
+from age_engine import train
+from age_utils import transforms, save_model
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)

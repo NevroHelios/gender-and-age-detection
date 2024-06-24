@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torchvision.transforms import  ToTensor, Normalize, Compose, Resize, Grayscale
 
-from a_utils import transforms
+from age_utils import transforms
 
 BATCH_SIZE = 64
 transforms = transforms()
@@ -59,6 +59,3 @@ def create_dataloader(train_dir,
                                  shuffle=False)
     
     return train_dataloader, test_dataloader
-
-
-

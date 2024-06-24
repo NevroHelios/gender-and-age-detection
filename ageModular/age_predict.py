@@ -5,15 +5,16 @@ import cv2
 import os
 import numpy as np
 
-from gen_model_builder import GENV0
-from gen_utils import transforms
+from age_model_builder import model_AGEV0
+from age_utils import transforms
 
 
+transforms = transforms()
 
-
-def predict_gender(img,
-                    model: torch.nn.Module,
-                    transforms) -> int:
+    
+def predict_age(img,
+                model: torch.nn.Module,
+                transforms = transforms) -> int:
     
     if img.any() is None:
         raise ValueError("No image found")
@@ -29,29 +30,37 @@ def predict_gender(img,
     with torch.inference_mode():
         pred = model(img)
         
-    gender_pred = transforms.tgt_transform(int(pred.squeeze().item()))
+    age_pred = int(transforms.pred_transform(pred).squeeze())
     
-    return gender_pred
+    return age_pred
 
-
+    
 
 if __name__ == "__main__":
-    transforms = transforms()
-
+    
+    
     model_path = Path(os.path.dirname(__file__)).parent / "models"
-    gender_model = GENV0(input_shape=1, output_shape=1)
-    gender_model.load_state_dict(torch.load(model_path / "model_gen.pth"))
+    age_model = model_AGEV0(input_shape=1, output_shape=1)
+    age_model.load_state_dict(torch.load(model_path / "model_age.pt"))
 
+
+    ### get sample image
     image_path = Path(os.path.dirname(__file__)).parent / Path("data/test/male/35_0_1_20170117151527396.jpg.chip.jpg")
+
     img = cv2.imread(str(image_path))
-    # print(img.shape)
+    print(img.shape)
     if img.any() is not None:
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         # img = Image.fromarray(img)
     else:
         img = Image.open(image_path)
-        
+    
+    
+    age_pred = predict_age(model=age_model,
+                           img=img,
+                           transforms=transforms)
+    
+    age_true = int(image_path.stem.split("_")[0])
 
-    gender_pred = predict_gender(img=img, model=gender_model, transforms=transforms)
-    gender_true = transforms.tgt_transform(int(image_path.stem.split("_")[1]))
-    print(f"Predicted Gender: {gender_pred}\nTrue Gender: {gender_true}")
+    print(f"Predicted Age: {age_pred}\nTrue Age: {age_true}")
+
