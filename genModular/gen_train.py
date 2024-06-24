@@ -3,10 +3,10 @@ import torch
 from torch import nn
 from torchvision.transforms import  ToTensor, Normalize, Compose, Resize, Grayscale
 
-from gen_data_setup import create_dataloader
-from gen_model_builder import GENV0
-from gen_engine import train
-from gen_utils import save_model
+from genModular.gen_data_setup import create_dataloader
+from genModular.gen_model_builder import GENV0
+from genModular.gen_engine import train
+from genModular.gen_utils import save_model
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)

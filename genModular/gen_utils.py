@@ -1,5 +1,6 @@
 from pathlib import Path
 import torch
+import os
 from torchvision.transforms import Compose, Resize, Grayscale, ToTensor
 
 class transforms:
@@ -26,3 +27,10 @@ def save_model(model: torch.nn.Module, model_path: str, model_name: str):
     
     print(f"Saving model to: {model_save_path}")
     torch.save(model.state_dict(), model_save_path)
+
+def load_model(model: torch.nn.Module, model_path: str, model_name: str):
+
+    model_save_path = Path(model_path) / model_name
+    
+    print(f"Loading model from: {model_save_path}")
+    model.load_state_dict(torch.load(model_save_path))

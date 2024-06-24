@@ -66,15 +66,15 @@ def train(model:torch.nn.Module,
 
     for epoch in tqdm(range(epochs)):
         train_loss = train_step(model=model,
-                                        dataloader=train_dataloader,
-                                        loss_fn=loss_fn,
-                                        optimizer=optimizer,
-                                        device=device)
+                                dataloader=train_dataloader,
+                                loss_fn=loss_fn,
+                                optimizer=optimizer,
+                                device=device)
 
         test_loss = test_step(model=model,
-                                        dataloader=test_dataloader,
-                                        loss_fn=loss_fn,
-                                        device=device)
+                              dataloader=test_dataloader,
+                              loss_fn=loss_fn,
+                              device=device)
 
         print(f"\ntrain loss {train_loss:.4f} | test loss {test_loss:.4f} | ")
         print("*"*14)

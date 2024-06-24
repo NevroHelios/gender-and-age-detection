@@ -5,8 +5,8 @@ import cv2
 import os
 import numpy as np
 
-from age_model_builder import model_AGEV0
-from age_utils import transforms
+from ageModular.age_model_builder import model_AGEV0
+from ageModular.age_utils import transforms
 
 
 transforms = transforms()
@@ -16,8 +16,8 @@ def predict_age(img,
                 model: torch.nn.Module,
                 transforms = transforms) -> int:
     
-    if img.any() is None:
-        raise ValueError("No image found")
+    # if img.any() is None:
+    #     raise ValueError("No image found")
     
     if isinstance(img, np.ndarray):
         img = Image.fromarray(img)

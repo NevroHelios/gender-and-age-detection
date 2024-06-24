@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torchvision.transforms import  ToTensor, Normalize, Compose, Resize, Grayscale
 
-from age_utils import transforms
+from ageModular.age_utils import transforms
 
 BATCH_SIZE = 64
 transforms = transforms()

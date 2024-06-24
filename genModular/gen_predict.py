@@ -5,18 +5,18 @@ import cv2
 import os
 import numpy as np
 
-from gen_model_builder import GENV0
-from gen_utils import transforms
+from genModular.gen_model_builder import GENV0
+from genModular.gen_utils import transforms
 
 
-
+transforms = transforms()
 
 def predict_gender(img,
                     model: torch.nn.Module,
-                    transforms) -> int:
+                    transforms = transforms) -> int:
     
-    if img.any() is None:
-        raise ValueError("No image found")
+    # if img.any() is None:
+    #     raise ValueError("No image found")
     
     if isinstance(img, np.ndarray):
         img = Image.fromarray(img)
@@ -36,7 +36,6 @@ def predict_gender(img,
 
 
 if __name__ == "__main__":
-    transforms = transforms()
 
     model_path = Path(os.path.dirname(__file__)).parent / "models"
     gender_model = GENV0(input_shape=1, output_shape=1)
