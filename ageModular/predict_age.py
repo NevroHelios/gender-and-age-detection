@@ -3,6 +3,7 @@ from pathlib import Path
 import torch
 import cv2
 import os
+import numpy as np
 
 from model_builder import model_AGEV0
 from a_utils import transforms
@@ -21,20 +22,43 @@ img = cv2.imread(str(image_path))
 print(img.shape)
 if img.any() is not None:
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = Image.fromarray(img)
+    # img = Image.fromarray(img)
 else:
     img = Image.open(image_path)
     
-
-img = transforms.feature_transform(img)
-
-img = img.unsqueeze(0)
-
-age_model.eval()
-with torch.inference_mode():
-    pred = age_model(img)
+def predict_age(img,
+                model: torch.nn.Module) -> int:
     
-age_pred = int(transforms.pred_transform(pred).squeeze())
+    if img.any() is None:
+        raise ValueError("No image found")
+    
+    if isinstance(img, np.ndarray):
+        img = Image.fromarray(img)
+        
+    img = transforms.feature_transform(img)
+    
+    img = img.unsqueeze(0)
+    
+    model.eval()
+    with torch.inference_mode():
+        pred = age_model(img)
+        
+    age_pred = int(transforms.pred_transform(pred).squeeze())
+    
+    return age_pred
+
+    
+
+# img = transforms.feature_transform(img)
+
+# img = img.unsqueeze(0)
+
+# age_model.eval()
+# with torch.inference_mode():
+#     pred = age_model(img)
+    
+age_pred = predict_age(model=age_model, img=img)
 age_true = int(image_path.stem.split("_")[0])
 
 print(f"Predicted Age: {age_pred}\nTrue Age: {age_true}")
+

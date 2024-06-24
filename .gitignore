@@ -3,3 +3,4 @@ archive
 data
 venv
 archive.zip
+__pycache__
