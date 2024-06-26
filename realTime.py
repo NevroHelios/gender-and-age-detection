@@ -62,7 +62,7 @@ if button and img:
     results = face_detector.process(img_arr)
     # print(results.detections)
     with cols[0]:
-        if len(results.detections) == 0:
+        if results.detections is None or len(results.detections) == 0:
             st.write("No face detected")
         else:
             for result in results.detections:
