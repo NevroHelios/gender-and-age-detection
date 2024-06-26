@@ -28,8 +28,9 @@ def predict_gender(img,
     model.eval()
     with torch.inference_mode():
         pred = model(img)
-        
-    gender_pred = transforms.tgt_transform(int(pred.squeeze().item()))
+    pred_prob = torch.sigmoid(pred).squeeze().item()
+    
+    gender_pred = transforms.tgt_transform(int(pred_prob > 0.5))
     
     return gender_pred
 

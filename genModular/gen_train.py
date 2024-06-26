@@ -1,7 +1,10 @@
 import os
 import torch
+import sys
 from torch import nn
 from torchvision.transforms import  ToTensor, Normalize, Compose, Resize, Grayscale
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from genModular.gen_data_setup import create_dataloader
 from genModular.gen_model_builder import GENV0
@@ -55,4 +58,5 @@ if __name__ == "__main__":
     end_time = timer()
     print(f"Total training time: {end_time - start_time}")
     
-    save_model(model=model, model_path="../models", model_name="GENV0.pth")
+    save_model(model=model, model_path="models", model_name="GENV0.pt")
+    print("Model saved!")

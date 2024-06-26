@@ -1,10 +1,13 @@
 import os
 import torch
+import sys
 from torch import nn
 from torchvision.transforms import ToTensor, Resize, Compose, Normalize, Grayscale
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
 from pathlib import Path
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from ageModular.age_model_builder import model_AGEV0
 from ageModular.age_data_setup import create_dataloader
@@ -18,7 +21,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
 BATCH_SIZE = 64
-NUM_EPOCHS = 10
+NUM_EPOCHS = 1
 
 train_dir = os.path.join(os.path.dirname(__file__), "../data/train") # "../data/train"
 test_dir = os.path.join(os.path.dirname(__file__), "../data/test") # "../data/test"
@@ -55,4 +58,5 @@ if __name__ == "__main__":
     end_time = timer()
     print(f"Total training time: {end_time - start_time}")
     
-    save_model(model=model_age, model_path="../models", model_name="AGEV0.pth")
+    save_model(model=model_age, model_path="models", model_name="AGEV0.pt")
+    
