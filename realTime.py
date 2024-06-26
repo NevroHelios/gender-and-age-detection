@@ -21,19 +21,19 @@ from genModular.gen_utils import load_model
 
 st.write("Real Time Age and Gender Prediction")
 
-@st.cache_resource
+# @st.cache_resource
 def load_age_model():
     age_model = model_AGEV0(input_shape=1, output_shape=1)
     load_model(age_model, model_path="models", model_name="AGEV0.pth")
     return age_model
     
-@st.cache_resource
+# @st.cache_resource
 def load_gen_model():
     gen_model = GENV0(input_shape=1, output_shape=1)
     load_model(gen_model, model_path="models", model_name="GENV0.pt")
     return gen_model
     
-@st.cache_resource
+# @st.cache_resource
 def load_face_detector():
     mp_face_detection = mp.solutions.face_detection
     face_detection = mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence=0.5)
