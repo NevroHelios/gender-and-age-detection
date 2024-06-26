@@ -65,8 +65,8 @@ pydeck==0.9.1
 Pygments==2.18.0
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
+torch==2.3.1+cu121
 pytz==2024.1
-pywin32==306
 PyYAML==6.0.1
 pyzmq==26.0.3
 referencing==0.35.1
@@ -85,7 +85,6 @@ tbb==2021.13.0
 tenacity==8.4.2
 toml==0.10.2
 toolz==0.12.1
-torch
 torchvision==0.18.1
 tornado==6.4.1
 tqdm==4.66.4
