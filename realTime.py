@@ -36,7 +36,7 @@ def load_gen_model():
 # @st.cache_resource
 def load_face_detector():
     mp_face_detection = mp.solutions.face_detection
-    face_detection = mp_face_detection.FaceDetection(model_selection=2, min_detection_confidence=0.5) # model selection -> (0, 1, 2)
+    face_detection = mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5) # model selection -> (0, 1, 2)
     return face_detection
 
 age_model = load_age_model()
