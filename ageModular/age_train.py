@@ -6,6 +6,7 @@ from torchvision.transforms import ToTensor, Resize, Compose, Normalize, Graysca
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
 from pathlib import Path
+import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -20,8 +21,15 @@ torch.cuda.manual_seed(42)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
-BATCH_SIZE = 64
-NUM_EPOCHS = 1
+parser = argparse.ArgumentParser()
+parser.add_argument("-m", "--model_name", type=str, default="AGEV1.pth", help="name of saved model")
+parser.add_argument("-p", "--model_path", type=str, default="models", help="where to save the model")
+parser.add_argument("-e", "--num_epochs", type=int, default=100, help="number of epochs to train for")
+parser.add_argument("-b", "--batch_size", type=int, default=64, help="input batch size for training")
+
+args = parser.parse_args()
+BATCH_SIZE = args.batch_size
+NUM_EPOCHS = args.num_epochs
 
 train_dir = os.path.join(os.path.dirname(__file__), "../data/train") # "../data/train"
 test_dir = os.path.join(os.path.dirname(__file__), "../data/test") # "../data/test"
@@ -58,5 +66,5 @@ if __name__ == "__main__":
     end_time = timer()
     print(f"Total training time: {end_time - start_time}")
     
-    save_model(model=model_age, model_path="models", model_name="AGEV0.pt")
+    save_model(model=model_age, model_path=args.model_path, model_name=args.model_name)
     

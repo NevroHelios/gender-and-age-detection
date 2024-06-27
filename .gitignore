@@ -4,3 +4,4 @@ data
 venv
 archive.zip
 __pycache__
+face_data

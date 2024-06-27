@@ -3,6 +3,7 @@ import torch
 import sys
 from torch import nn
 from torchvision.transforms import  ToTensor, Normalize, Compose, Resize, Grayscale
+import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -17,8 +18,15 @@ torch.cuda.manual_seed(42)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
-BATCH_SIZE = 64
-NUM_EPOCHS = 10
+parser = argparse.ArgumentParser()
+parser.add_argument("-m", "--model_name", type=str, default="GENV1.pt", help="name of saved model")
+parser.add_argument("-p", "--model_path", type=str, default="models", help="where to save the model")
+parser.add_argument("-e", "--num_epochs", type=int, default=10, help="number of epochs to train for")
+parser.add_argument("-b", "--batch_size", type=int, default=64, help="input batch size for training")
+args = parser.parse_args()
+
+BATCH_SIZE = args.batch_size
+NUM_EPOCHS = args.num_epochs
 
 train_dir = os.path.join(os.path.dirname(__file__), "../data/train")
 test_dir = os.path.join(os.path.dirname(__file__), "../data/test")
@@ -58,5 +66,5 @@ if __name__ == "__main__":
     end_time = timer()
     print(f"Total training time: {end_time - start_time}")
     
-    save_model(model=model, model_path="models", model_name="GENV0.pt")
+    save_model(model=model, model_path=args.model_path, model_name=args.model_name)
     print("Model saved!")
