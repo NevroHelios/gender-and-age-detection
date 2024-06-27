@@ -6,7 +6,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from torch import nn
-import mediapipe as mp  
+from facenet_pytorch import MTCNN 
 import streamlit as st
 
 # import sys
@@ -21,13 +21,13 @@ from genModular.gen_utils import load_model
 
 st.write("Real Time Age and Gender Prediction")
 
-# @st.cache_resource
+@st.cache_resource
 def load_age_model():
     age_model = model_AGEV0(input_shape=1, output_shape=1)
     load_model(age_model, model_path="models", model_name="AGEV0.pth")
     return age_model
     
-# @st.cache_resource
+@st.cache_resource
 def load_gen_model():
     gen_model = GENV0(input_shape=1, output_shape=1)
     load_model(gen_model, model_path="models", model_name="GENV0.pt")
@@ -35,13 +35,12 @@ def load_gen_model():
     
 # @st.cache_resource
 def load_face_detector():
-    mp_face_detection = mp.solutions.face_detection
-    face_detection = mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5) # model selection -> (0, 1, 2)
-    return face_detection
+    mtcnn = MTCNN(keep_all=True, min_face_size=20, thresholds=[0.6, 0.7, 0.7])
+    return mtcnn
 
 age_model = load_age_model()
 gen_model = load_gen_model()
-face_detector = load_face_detector()
+mtcnn = load_face_detector()
 
 img = st.file_uploader("Upload Image", type=['jpg', 'png', 'jpeg'])
 
@@ -50,30 +49,30 @@ button = st.button("Predict")
 cols = st.columns(2)
 if button and img:
 
-    img = Image.open(img)
-    img_arr = np.array(img)
+    img = cv2.imdecode(np.frombuffer(img.read(), np.uint8), cv2.IMREAD_COLOR)
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     
-    ih, iw, ic = img_arr.shape
+    # ih, iw, ic = img_arr.shape
     
-    if img_arr.shape[2] == 4:
-        img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2RGB)
-
+    # if img_arr.shape[2] == 4:
+    #     img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2RGB)
+    # else:
+    #     img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGR2RGB)
     # img_rgb = cv2.cvtColor(img_arr, cv2.COLOR_BGR2GRAY)
-    results = face_detector.process(img_arr)
+    # print(img_rgb.shape)
+    img_pil = Image.fromarray(img_rgb)
+    boxes, conf = mtcnn.detect(img_pil)
+    
     # print(results.detections)
     with cols[0]:
-        if results.detections is None or len(results.detections) == 0:
+        if len(boxes) == 0:
             st.write("No face detected")
         else:
-            for result in results.detections:
-                print(result.location_data.relative_bounding_box)
-                bbox = result.location_data.relative_bounding_box
-                x, y, w, h = bbox.xmin, bbox.ymin, bbox.width, bbox.height
-                xmin = int(iw * x)
-                ymin = int(ih * y)
-                width = int(iw * w)
-                height = int(ih * h)
-                face = img_arr[ ymin : ymin + height, xmin : xmin + width]
+            st.write("Number of people detected: ", len(boxes))
+            # print(boxes)
+            for box in boxes:
+                x1, y1, x2, y2 = [int(coord) for coord in box]
+                face = img_rgb[y1:y2, x1:x2]
                 # img = cv2.rectangle(img_arr, (xmin, ymin), (width, height), (255, 0, 0), 2)
                 # face_rgb = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)
                 st.image(face, caption="Detected Face")
@@ -83,6 +82,6 @@ if button and img:
 
                 st.write(f"Age: {age}\nGender: {gender}")
     with cols[1]:
-        st.image(img)
+        st.image(img_rgb)
         
         
